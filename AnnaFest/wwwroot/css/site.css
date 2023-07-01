@@ -1,0 +1,188 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.contentWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.standardForm {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    width: 90%;
+    padding: 28px;
+    padding-bottom: 0;
+    background: #80808033;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.inputWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.textInput {
+    border: 1px solid grey;
+    border-radius: 8px;
+}
+
+.formFooter {
+    margin-top: 32px;
+    padding: 12px;
+    background: #6969a5;
+    left: -28px;
+    position: relative;
+    width: calc(100% + 56px);
+    display: flex;
+    justify-content: center;
+}
+
+.primaryButton {
+    border-radius: 8px;
+    width: 240px;
+    border: 1px solid grey;
+    height: 48px;
+    background: #50a650;
+    font-size: 20px;
+}
+
+.photoArea {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+}
+
+.photoArea img {
+    max-height: 70vh;
+}
+
+.photoDescription {
+    font-size: 32px;
+}
+
+.photoUser {
+    font-size: 38px;
+}
+
+.miniPhoto {
+    vertical-align: middle;
+    max-width: 128px;
+    max-height: 128px;
+    height: 128px;
+    width: 128px;
+}
+
+.photosWrapper {
+    display: flex;
+    gap: 8px;
+}
+
+.secretToucher {
+    width: 100vw;
+    height: 128px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: white;
+    border: none;
+}
+
+.popupOverlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    background: rgba(214, 209, 209, 0.6);
+}
+
+.popupContent {
+    display: flex;
+    top: 10%;
+    position: relative;
+    left: 10%;
+    width: calc(100% - 10%);
+    height: calc(100% - 10%);
+    background: #fafcff;
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.alertBox {
+    left: 10%;
+    position: relative;
+    top: 30%;
+    background: #d96873;
+    width: fit-content;
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    min-width: 448px;
+    min-height: 224px;
+    justify-content: space-between;
+    max-width: 80vw;
+}
+
+.alertMessage {
+    text-align: center;
+    font-size: 18px;
+}
+
+.sectionButton {
+    border-radius: 8px;
+    border: 1px solid grey;
+    padding: 8px;
+    background-color: #65e1f5;
+    min-width: 128px;
+}
+
+.adminButton {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid grey;
+}
+
+.adminButton#delete {
+    background: #fb5f5f;
+}
+
+.adminButtonWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.fileUpload {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #c266c2;
+}
+
+.fileUpload input {
+    display: none;
+}
+
+.fileUpload span {
+    font-size: 20px;
+}

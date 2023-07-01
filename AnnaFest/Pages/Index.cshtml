@@ -1,0 +1,52 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Anna fyller 30!";
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery _antiforgery
+@{
+    string tokenValue = _antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<div class="photoArea">
+    <img src="#" id="Photo" />
+
+    <span class="photoUser" id="photoUser"></span>
+    <span class="photoDescription" id="description"></span>
+</div>
+<input type="hidden" id="myToken" name="MyAntiForgeryField" value="@tokenValue">
+
+<script>
+    @Html.Raw(Model.PhotoJson)
+
+    if (photoJson) {
+        $('#description').text(photoJson.description);
+        $('#photoUser').text(photoJson.user);
+        $('#Photo').attr('src', photoJson.fileName);
+    }
+
+    setInterval(() => updatePicture(), 2000);
+
+    function updatePicture() {
+        var token = $("#myToken").val();
+        $.ajax({
+            type: "POST",
+            url: "/",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN", token)
+            },
+            data: 'newPicture',
+            success: (e) => onPictureReceived(e)
+        });
+    }
+
+    function onPictureReceived(photoJson) {
+        if (photoJson && photoJson.fileName) {
+            $('#description').text(photoJson.description);
+            $('#Photo').attr('src', photoJson.fileName);
+            $('#photoUser').text(photoJson.user);
+        }
+    }
+</script>

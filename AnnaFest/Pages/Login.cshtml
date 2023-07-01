@@ -1,0 +1,49 @@
+﻿@page
+@model AnnaFest.Pages.LoginModel
+@{
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/Popup.js"></script>
+<script src="~/js/Alert.js"></script>
+<script src="~/js/HtmlUtils.js"></script>
+<div class="contentWrapper">
+    <form method="post" enctype="multipart/form-data" class="standardForm">
+        <div class="inputWrapper">
+            <span class="inputLabel">Vem är du? :)</span>
+            <input type="text" class="textInput" name="name" id="username"/>
+        </div>
+        <div class="inputWrapper" id="secret">
+            <span class="inputLabel">Hemligt ;)</span>
+            <input type="password" class="textInput" name="secret" />
+        </div>
+
+        <div class="formFooter">
+            <input type="submit" class="primaryButton" value="Klar"/>
+        </div>
+    </form>
+</div>
+
+<button class="secretToucher" type="button"></button>
+
+<script>
+    $('#secret').hide();
+    $('.secretToucher').on('click', () => {
+        $('#secret').show();
+    })
+
+    $('.primaryButton').on('click', () => {
+        var value = $('#username').val();
+        if (!value || value === '') {
+            Alert.openAlert('Ange ett namn');
+            return false;
+        }
+
+        if (value.length > 15) {
+            Alert.openAlert('Lite långt va');
+            return false;
+        }
+
+        return true;
+    })
+</script>

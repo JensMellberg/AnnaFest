@@ -1,0 +1,75 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.contentWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.standardForm {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    width: 90%;
+    padding: 28px;
+    padding-bottom: 0;
+    background: #80808033;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.inputWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.formFooter {
+    margin-top: 32px;
+    padding: 12px;
+    background: #6969a5;
+    left: -28px;
+    position: relative;
+    width: calc(100% + 56px);
+    display: flex;
+    justify-content: center;
+}
+
+.primaryButton {
+    border-radius: 8px;
+    width: 240px;
+    border: 1px solid grey;
+    height: 48px;
+    background: #50a650;
+}
+
+.photoArea {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+}
+
+.photoArea img {
+    max-height: 80vh;
+}
+
+.photoDescription {
+    font-size: 24px;
+}

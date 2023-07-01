@@ -1,0 +1,53 @@
+﻿@page
+@model PrivacyModel
+@{
+    ViewData["Title"] = "Galleri";
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<div class="photosWrapper">
+    @foreach (var p in @Model.Photos)
+    {
+        <div class=photoWrapper photoId="@p.id">
+            <img class="miniPhoto" src="@p.fileName">
+            @if (!string.IsNullOrEmpty((string)ViewData["IsAdmin"]))
+            {
+                <div class="adminButtonWrapper">
+                    <button class="adminButton" id="moveLeft" photoId="@p.id">&lt;</button>
+                    <button class="adminButton" id="moveRight" photoId="@p.id">&gt;</button>
+                    <button class="adminButton" id="delete" photoId="@p.id">X</button>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<script>
+    $('.miniPhoto').on('click', e => {
+        var target = e.target;
+        var id = target.getAttribute("photoId");
+        if (id && id.length > 0) {
+
+        }
+    });
+
+    if ($('.adminButtonWrapper').length > 0) {
+        $('#delete').on('click', (e) => {
+            var id = e.target.getAttribute("photoId");
+            var data = {
+                action: 'delete',
+                id: id
+            };
+            $.ajax({
+                type: "POST",
+                url: "/Gallery",
+                data: data,
+                success: (e) => onPictureDeleted(id)
+            });
+        })
+    }
+
+    function onPictureDeleted(id) {
+        $('.photoWrapper[photoId="' + id + '"]').remove();
+    }
+</script>

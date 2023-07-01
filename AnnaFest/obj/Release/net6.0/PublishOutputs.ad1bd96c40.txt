@@ -1,0 +1,8 @@
+C:\Users\jens_\source\repos\AnnaFest\AnnaFest\obj\Release\net6.0\PubTmp\Out\AnnaFest.exe
+C:\Users\jens_\source\repos\AnnaFest\AnnaFest\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+C:\Users\jens_\source\repos\AnnaFest\AnnaFest\obj\Release\net6.0\PubTmp\Out\appsettings.json
+C:\Users\jens_\source\repos\AnnaFest\AnnaFest\obj\Release\net6.0\PubTmp\Out\AnnaFest.dll
+C:\Users\jens_\source\repos\AnnaFest\AnnaFest\obj\Release\net6.0\PubTmp\Out\AnnaFest.deps.json
+C:\Users\jens_\source\repos\AnnaFest\AnnaFest\obj\Release\net6.0\PubTmp\Out\AnnaFest.runtimeconfig.json
+C:\Users\jens_\source\repos\AnnaFest\AnnaFest\obj\Release\net6.0\PubTmp\Out\AnnaFest.pdb
+C:\Users\jens_\source\repos\AnnaFest\AnnaFest\obj\Release\net6.0\PubTmp\Out\Newtonsoft.Json.dll
