@@ -11,20 +11,29 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <div class="photoArea">
-    <img src="#" id="Photo" />
+    <div class="photoInnerWrapper">
+        <img src="#" id="Photo" />
 
-    <span class="photoUser" id="photoUser"></span>
-    <span class="photoDescription" id="description"></span>
+        <div class="photoDescriptionWrapper">
+            <span class="photoUser" id="photoUser"></span>
+            <span class="photoDescription" id="description"></span>
+        </div>
+    </div>
 </div>
 <input type="hidden" id="myToken" name="MyAntiForgeryField" value="@tokenValue">
 
 <script>
     @Html.Raw(Model.PhotoJson)
 
+    var photo = $('#Photo');
+    $(photo).on('load', () => {
+        $('.photoDescriptionWrapper').css('width', photo.outerWidth() + 'px');
+    });
+
     if (photoJson) {
         $('#description').text(photoJson.description);
         $('#photoUser').text(photoJson.user);
-        $('#Photo').attr('src', photoJson.fileName);
+        photo.attr('src', photoJson.fileName);
     }
 
     setInterval(() => updatePicture(), 2000);
@@ -37,7 +46,6 @@
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("XSRF-TOKEN", token)
             },
-            data: 'newPicture',
             success: (e) => onPictureReceived(e)
         });
     }

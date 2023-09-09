@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Content Include="JsonUtils.cs" />
+    <Content Include="Quiz\QuizManager.cs" />
+    <Content Include="SettingsRepository.cs" />
     <Content Include="User.cs" />
     <Content Include="PhotoHelper.cs" />
   </ItemGroup>

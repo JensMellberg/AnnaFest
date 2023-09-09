@@ -17,6 +17,12 @@ namespace AnnaFest.Pages
                 return RedirectToPage("Login", new { returnTo = "LaddaUpp" });
             }
 
+            if (!SettingsRepository.Instance.UploadEnabled)
+            {
+                this.SetForwardAlert("Uppladdning av bilder är avstängd för tillfället.");
+                return RedirectToPage("/Index");
+            }
+
             this.SetViewData();
             return Page();
         }
@@ -25,6 +31,7 @@ namespace AnnaFest.Pages
         {
             description = JsonUtils.RemoveAllWeirdness(description);
             PhotoRepository.Instance.AddFile(this.environment.WebRootPath, postedFile, description, this.User.Name);
+            this.SetForwardAlert("Bilden är uppladdad.");
             return RedirectToPage("Index");
         }
     }

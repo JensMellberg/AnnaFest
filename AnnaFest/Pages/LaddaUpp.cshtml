@@ -5,28 +5,25 @@
 }
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/js/Popup.js"></script>
-<script src="~/js/Alert.js"></script>
-<script src="~/js/HtmlUtils.js"></script>
 
-<div class="contentWrapper">
+
+<div class="contentWrapper uploadPicturePage">
     <form method="post" enctype="multipart/form-data" class="standardForm">
+        <div class="inputWrapper">
+            <input type="submit" class="primaryButton disabled buttonStyle" value="Ladda upp" disabled />
+        </div>
         <div class="inputWrapper">
             <span class="inputLabel">Beskrivning</span>
             <textarea rows="4" class="textInput" id="description" name="description"></textarea>
         </div>
-        <div class="inputWrapper">
+        <div class="inputWrapper buttonStyle">
           <label for="fileInput" class="fileUpload">
-              <span>Ladda upp bild</span>
+              <span>Välj bild</span>
               <input type="file" id="fileInput" name="postedFile"/>
           </label>
         </div>
         <div class="inputWrapper" id="filePreviewWrapper">
             <img id="filePreview" src="#" />
-        </div>
-
-        <div class="formFooter">
-            <input type="submit" class="primaryButton disabled" value="Ladda upp" disabled />
         </div>
     </form>
 </div>
@@ -54,7 +51,7 @@
         toggleButton(false);
     }).on('error', () => {
         if (filePreview.attr('src') !== '#') {
-            Alert.openAlert('Det gick inte att ladda upp bilden :(');
+            Alert.openAlert('Det gick inte att ladda upp bilden.');
         }
     });
 

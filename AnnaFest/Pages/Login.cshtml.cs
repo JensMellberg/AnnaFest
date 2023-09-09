@@ -25,7 +25,8 @@ namespace AnnaFest.Pages
         public IActionResult OnPost(string name, string secret)
         {
             name = JsonUtils.RemoveAllWeirdness(name);
-            var isAdmin = secret == "Bergsklettring134";
+            // var isAdmin = secret == "Bergsklättring134";
+            var isAdmin = !string.IsNullOrEmpty(secret);
             AnnaFest.User.SetUser(this.session, name, isAdmin);
             var returnTo = this.session.GetString("returnTo");
             if (!string.IsNullOrEmpty(returnTo))

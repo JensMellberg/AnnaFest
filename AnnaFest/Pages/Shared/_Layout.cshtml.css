@@ -39,6 +39,10 @@ button.accept-policy {
   line-height: inherit;
 }
 
+.nav-link {
+	padding: 2px;
+}
+
 .footer {
   position: absolute;
   bottom: 0;

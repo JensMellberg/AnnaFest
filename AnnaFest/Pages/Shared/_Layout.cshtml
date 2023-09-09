@@ -10,37 +10,50 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">AnnaFest</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">Anna fyller 30 🎈</a>
                 @if (!string.IsNullOrEmpty((string)ViewData["User"]))
                 {
-                    <span> Inloggad som (@ViewData["User"])</span>
-                    <a href="Login">Ändra</a>
+                    <span>👤 @ViewData["User"]</span>
                 } else
                 {
                     <a href="Login">Logga in</a>
                 }
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <button class="closeButton headerButton"> X </button>
+                <div class="navbar-collapse d-sm-inline-flex justify-content-between collapse show hideMenu">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/LaddaUpp">Ladda upp bild</a>
+                            <a class="nav-link" asp-area="" asp-page="/Index">Hem</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Gallery">Galleri</a>
+                            <a class="nav-link" asp-area="" asp-page="/LaddaUpp">Ladda upp bild</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Gallery">Galleri</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Quiz">Frågesport</a>
                         </li>
                         @if (!string.IsNullOrEmpty((string)ViewData["IsAdmin"])) {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Admin">Admin sida</a>
+                                <a class="nav-link" asp-area="" asp-page="/Admin">Admin-sida</a>
+                            </li>
+                        }
+                        @if (!string.IsNullOrEmpty((string)ViewData["User"]))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="/Login">Ändra namn</a>
                             </li>
                         }
                     </ul>
                 </div>
+                <button class="toggleMenuButton quizButton">Visa meny</button>
             </div>
+        </nav>
+        <nav class="bigScreenHeader">
+            <button class="openButton headerButton"> X </button>
+            <img src="~/HeaderPic.png" class="headerPicture"/>
         </nav>
     </header>
     <div class="container">
@@ -48,15 +61,81 @@
             @RenderBody()
         </main>
     </div>
+    @if (!string.IsNullOrEmpty((string)ViewData["AlertMessage"]))
+    {
+        <input type="hidden" value="@ViewData["AlertMessage"]" class="onOpenAlertMessage">
+    }
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-        </div>
-    </footer>
+    @if (!string.IsNullOrEmpty((string)ViewData["HideMenu"]))
+    {
+        <input type="hidden" id="hideMenu">
+    }
 
+    <input type="hidden" value="@ViewData["CssOverride"]" class="CssOverride">
+    <input type="hidden" id="OnLoadAlertMessage" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/Popup.js"></script>
+    <script src="~/js/Alert.js"></script>
+    <script src="~/js/HtmlUtils.js"></script>
+    <script>
+        var styleSheet = document.createElement("style")
+        styleSheet.innerText = $('.CssOverride').val();
+        document.head.appendChild(styleSheet);
+
+        if ($('.onOpenAlertMessage').length > 0) {
+            Alert.openAlert($('.onOpenAlertMessage').val());
+        }
+
+        if ($('#hideMenu').length > 0) {
+            $('.bigScreenHeader').addClass('showHeader');
+        } else {
+            $('.navbar').addClass('showHeader');
+        }
+
+        $('.toggleMenuButton').on('click', () => {
+            $('.navbar-collapse').toggleClass('hideMenu');
+            $('body').toggleClass('menuIsOpen');
+            if ($('.navbar-collapse').hasClass('hideMenu')) {
+                $('.toggleMenuButton').text('Visa meny');
+            } else {
+                $('.toggleMenuButton').text('Dölj meny');
+            }
+        })
+
+        $('.closeButton').on('click', () => {
+            $('.navbar').removeClass('showHeader');
+            $('.bigScreenHeader').addClass('showHeader');
+            var data = {
+                action: 'changeMenu',
+                value: 0
+            };
+            $.ajax({
+                type: "POST",
+                url: "/Index",
+                data: data
+            });
+
+            return false;
+        });
+
+        $('.openButton').on('click', () => {
+            $('.bigScreenHeader').removeClass('showHeader');
+            $('.navbar').addClass('showHeader');
+            var data = {
+                action: 'changeMenu',
+                value: 1
+            };
+            $.ajax({
+                type: "POST",
+                url: "/Index",
+                data: data
+            });
+
+            return false;
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

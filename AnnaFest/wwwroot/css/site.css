@@ -8,6 +8,112 @@ html {
   }
 }
 
+@font-face {
+    font-family: customFont;
+    src: url(../DiplomataSC-Regular.ttf);
+}
+
+@font-face {
+    font-family: defaultFont;
+    src: url(../PlayfairDisplay-Regular.ttf);
+}
+
+button {
+    background: url(../button.png);
+    background-size: 100% 100%;
+}
+
+body {
+    background: url(../background.jpg);
+    background-size: 100% 100%;
+    font-family: defaultFont;
+    color: #d5ad24;
+}
+
+span {
+    font-family: defaultFont;
+}
+
+button {
+    color: black;
+    font-family: defaultFont;
+}
+
+input {
+    font-family: defaultFont;
+}
+
+.coolFont {
+    font-family: customFont;
+}
+
+.navbar a {
+    color: #d5ad24;
+}
+
+.buttonStyle {
+    background: url(../button.png);
+    font-family: customFont;
+    background-size: 100% 100%;
+    font-size: 14px;
+    color: black;
+}
+
+.headerButton {
+    position: absolute;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    top: 10px;
+    background: red;
+    display: flex;
+    opacity: 0;
+}
+
+.toggleMenuButton {
+    display: none;
+}
+
+.headerButton:hover {
+    opacity: 1;
+}
+
+@media screen and (max-width: 726px) {
+    .headerButton {
+        display: none;
+    }
+
+    .navbar-collapse.hideMenu {
+        display: none;
+    }
+    
+    .toggleMenuButton {
+        display: flex;
+    }
+}
+
+.bigScreenHeader {
+    display: none;
+    height: 120px;
+    padding: 12px;
+    align-items: center;
+    justify-content: center;
+}
+
+.headerPicture {
+    height: 96px;
+    width: 80vw;
+}
+
+.navbar {
+    display: none;
+}
+
+.showHeader {
+    display: flex;
+}
+
 html {
   position: relative;
   min-height: 100%;
@@ -23,12 +129,14 @@ html {
     display: flex;
     flex-direction: column;
     gap: 48px;
-    width: 90%;
-    padding: 28px;
+    width: 95%;
+    padding-top: 60px;
+    padding-left: 30px;
+    padding-right: 30px;
     padding-bottom: 0;
-    background: #80808033;
-    border-radius: 16px;
     overflow: hidden;
+    background: url(../ContentWrapper.png);
+    background-size: 100% 100%;
 }
 
 .inputWrapper {
@@ -45,21 +153,26 @@ html {
 .formFooter {
     margin-top: 32px;
     padding: 12px;
-    background: #6969a5;
+    padding-left: 30px;
+    padding-right: 30px;
     left: -28px;
     position: relative;
     width: calc(100% + 56px);
     display: flex;
     justify-content: center;
+    margin-bottom: 40px;
 }
 
 .primaryButton {
     border-radius: 8px;
     width: 240px;
-    border: 1px solid grey;
     height: 48px;
-    background: #50a650;
-    font-size: 20px;
+    font-size: 14px;
+    border: none;
+}
+
+.primaryButton.disabled {
+    opacity: 0.5;
 }
 
 .photoArea {
@@ -68,8 +181,46 @@ html {
     height: 90vh;
 }
 
+button:hover {
+    filter: brightness(1.2);
+}
+
+.buttonStyle:hover {
+    filter: brightness(1.2);
+}
+
+.extraBottomPadding form {
+    padding: 80px;
+}
+
 .photoArea img {
     max-height: 70vh;
+    border: 5px solid #d5ad24;
+    border-bottom: none;
+    width: fit-content;
+    min-width: 30vw;
+    max-width: 95vw;
+}
+
+.photoDescriptionWrapper {
+    flex-direction: column;
+    display: flex;
+    border: 5px solid #d5ad24;
+    border-top: none;
+    background-color: black;
+    padding: 18px 18px;
+}
+
+.photoInnerWrapper {
+    display: flex;
+    width: fit-content;
+    flex-direction: column;
+    align-self: center;
+}
+
+#filePreview {
+    max-height: 30vh;
+    align-self: center;
 }
 
 .photoDescription {
@@ -91,6 +242,7 @@ html {
 .photosWrapper {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
 }
 
 .secretToucher {
@@ -99,7 +251,7 @@ html {
     position: fixed;
     bottom: 0;
     left: 0;
-    background: white;
+    background: transparent;
     border: none;
 }
 
@@ -128,13 +280,13 @@ html {
     left: 10%;
     position: relative;
     top: 30%;
-    background: #d96873;
+    background: url(../ContentWrapper.png);
+    background-size: 100% 100%;
     width: fit-content;
-    border-radius: 16px;
     padding: 32px;
     display: flex;
     flex-direction: column;
-    min-width: 448px;
+    min-width: 224px;
     min-height: 224px;
     justify-content: space-between;
     max-width: 80vw;
@@ -145,11 +297,16 @@ html {
     font-size: 18px;
 }
 
+.alertButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
 .sectionButton {
     border-radius: 8px;
-    border: 1px solid grey;
+    border: none;
     padding: 8px;
-    background-color: #65e1f5;
     min-width: 128px;
 }
 
@@ -160,7 +317,7 @@ html {
     border: 1px solid grey;
 }
 
-.adminButton#delete {
+.adminButton.adminDeleteButton {
     background: #fb5f5f;
 }
 
@@ -169,14 +326,18 @@ html {
     justify-content: space-between;
 }
 
+.inputLabel {
+    text-align: center;
+    font-size: 24px;
+}
+
 .fileUpload {
     width: 100%;
-    height: 48px;
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 12px;
-    background: #c266c2;
 }
 
 .fileUpload input {
@@ -184,5 +345,201 @@ html {
 }
 
 .fileUpload span {
+    font-size: 12px;
+    transform: scale(2, 2);
+}
+
+.quizOuter {
+    font-family: cursive;
+}
+
+.quizResultText {
+    font-family: customFont;
     font-size: 20px;
+}
+
+.quizContentWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+.quizTitle {
+    font-size: 48px;
+    font-family: customFont;
+    transform: scale(1, 1.5);
+}
+
+.questionText {
+    font-size: 32px;
+    font-family: customFont;
+    transform: scale(1, 1.5);
+}
+
+.textInput.high {
+    height: 400px;
+}
+
+.quizCounter {
+    font-size: 96px;
+    padding-bottom: 80px;
+    background-image: url('../Star.png');
+    background-size: 420px 389px;
+    background-position-x: 10px;
+    background-position-y: 0px;
+    background-repeat: no-repeat;
+    border-radius: 440px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    position: absolute;
+    width: 440px;
+    height: 420px;
+    left: calc(50% - 210px);
+    /*top: calc(45% - 128px);*/
+    top: 275px;
+    font-weight: 800;
+    background-color: black;
+    outline: 5px solid #d5ad24;
+}
+
+.phoneQuiz .quizCounter.correct {
+    background-image: url('../Correct.png');
+    font-size: 0;
+}
+
+.phoneQuiz .quizCounter.wrong {
+    background-image: url('../Wrong.png');
+    font-size: 0;
+}
+
+.phoneQuiz .quizCounter {
+    padding-bottom: 0;
+    font-size: 18px;
+    width: 128px;
+    height: 128px;
+    left: calc(50% - 64px);
+    top: 200px;
+    background-position-x: 0;
+    background-size: 130px 128px;
+    outline: none;
+    border-radius: 0;
+}
+
+.phoneQuiz .quizButton {
+    font-size: 24px;
+    padding-left: 28px;
+    padding-right: 28px;
+}
+
+.uploadPicturePage .standardForm {
+    padding-top: 88px;
+    padding-bottom: 88px;
+}
+
+.uploadPicturePage .primaryButton {
+    width: unset;
+}
+
+.quizButton {
+    border-radius: 8px;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.quizButton:disabled {
+    opacity: 0.7;
+}
+
+.quizButtonsWrapper {
+    display: flex;
+    gap: 16px;
+}
+
+.leaderBoardWrapper {
+    margin-top: 16px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 80vw;
+}
+
+.leaderBoardEntry {
+    display: flex;
+    justify-content: space-between;
+    font-size: 32px;
+    border-bottom: 4px solid gold;
+    padding-bottom: 4px;
+    max-width: 80vw;
+    position: relative;
+}
+
+.leaderBoardEntry.currentUser {
+    color: #f3e07d;
+    border-bottom: 4px solid #f3e07d;
+}
+
+@media (min-width: 768px) {
+    .leaderBoardEntry:first-child {
+        width: 130%;
+        left: -15%;
+        font-size: 54px;
+    }
+
+    .leaderBoardEntry:nth-child(2) {
+        width: 120%;
+        left: -10%;
+        font-size: 48px;
+    }
+
+    .leaderBoardEntry:nth-child(3) {
+        width: 110%;
+        left: -5%;
+        font-size: 42px;
+    }
+}
+
+.menuIsOpen .guessWrapper {
+    top: 120px;
+}
+
+.quizText {
+    font-size: 24px;
+}
+
+.guessWrapper {
+    position: relative;
+    top: 300px;
+}
+
+.guessWrapper .quizTextbox {
+    width: 80%;
+    height: 48px;
+    font-family: defaultFont;
+    font-size: 24px;
+}
+
+.guessWrapper .quizButton {
+    width: 80%;
+    height: 48px;
+}
+
+.leaderBoardIncrease {
+    position: absolute;
+    margin-left: 60px;
+}
+
+.leaderBoardIncrease::before {
+    content: '+';
+}
+
+.answerText {
+    font-size: 32px;
+    transform: scale(1, 1.5);
+    font-family: customFont;
 }

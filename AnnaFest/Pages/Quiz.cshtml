@@ -1,0 +1,175 @@
+﻿@page
+@model AnnaFest.Pages.QuizModel
+@{
+    ViewData["Title"] = "Frågesport";
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/LeaderBoard.js"></script>
+<script src="~/js/HtmlUtils.js"></script>
+
+<div class="quizOuter phoneQuiz">
+@if (this.Model.IsQuizStarted)
+{
+    @if (!this.Model.PlayerHasJoined)
+    {
+        <input type="hidden" id="dontRefresh">
+        <div class="quizContentWrapper">
+            <span class="quizText">Frågesporten har redan börjat. Vill du gå med?</span>
+            <button class="quizButton" id="joinQuiz">Gå med i frågesporten</button>
+        </div>
+    }
+    else if (this.Model.QuizManager.Status == Quiz.QuizStatus.WaitingForQuestion)
+    {
+            <span class="quizCounter" id="waitingForQuestion"></span>
+    }
+    else if (this.Model.QuizManager.Status == Quiz.QuizStatus.QuestionShown)
+    {
+        var otherClass = this.Model.HasPlayerAnsweredCorrectly ? "correct" : (this.Model.HasPlayerAnswered ? "wrong" : "");
+        <span class="quizCounter @otherClass" id="waitingForQuestion"></span>
+        <div class="quizContentWrapper guessWrapper">
+        @if (!this.Model.HasPlayerAnswered)
+        {
+            <input class="quizTextbox" id="answerBox">
+            <button class="quizButton" id="guessButton">Gissa</button>
+        }
+        else if (this.Model.HasPlayerAnsweredCorrectly)
+        {
+            <span class="quizResultText"> Du hade rätt!</span>
+        }
+        else
+        {
+            <span class="quizResultText"> Du hade fel!</span>
+        }
+
+        </div>
+    }
+    else if (this.Model.QuizManager.Status == Quiz.QuizStatus.QuestionFinished)
+    {
+        <div class="quizContentWrapper">
+            <span class="quizText" id="waitingText">Väntar på nästa fråga</span>
+        </div>
+    }
+}
+else
+{
+    @if (this.Model.PlayerHasJoined)
+    {
+        <div class="quizContentWrapper">
+            <div id="leaderBoardWrapper"></div>
+        </div>
+    }
+    else
+    {
+        <div class="quizContentWrapper">
+            <span class="quizText">Väntar på att frågesporten ska börja</span>
+            <button class="quizButton" id="joinQuiz">Gå med i frågesporten</button>
+        </div>
+    }
+}
+</div>
+
+<script>
+   @Html.Raw(Model.ScoresJson)
+   @Html.Raw(Model.TimeCounter)
+   @Html.Raw(Model.UserNameJson)
+   var status = 0;
+   $('#joinQuiz').on('click', () => {
+        var data = {
+            action: 'joinQuiz'
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Quiz",
+            data: data,
+            success: (e) => { window.location.reload(); }
+        });
+   })
+
+    $('#guessButton').on('click', () => {
+        var answer = $('#answerBox').val();
+        if (!answer || answer.length < 1) {
+            return false;
+        };
+
+        var data = {
+            action: 'guess',
+            answer: answer
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Quiz",
+            data: data,
+            success: (e) => { window.location.reload(); }
+        });
+    })
+
+   var leaderBoard = $('#leaderBoardWrapper');
+   if (leaderBoard.length > 0) {
+       leaderBoard.html('');
+       leaderBoard.append(LeaderBoard.createLeaderBoard(scoresJson, false, userName));
+       status = -1;
+   }
+
+    var quizCounter = $('#waitingForQuestion');
+    if (quizCounter.length > 0) {
+        quizCounter.text(timeCounter);
+        status = -2;
+    }
+
+    var answerBox = $('#answerBox');
+    if (answerBox.length > 0 || $('.quizResultText').length > 0) {
+        status = -3;
+        $('#answerBox').focus();
+    }
+
+    if ($('#dontRefresh').length === 0) {
+        setInterval(() => updateStatus(), 1000);
+    }
+
+    function updateStatus() {
+        var data = {
+            action: 'update',
+            status: status
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Quiz",
+            data: data,
+            success: (e) => onStatusUpdated(e)
+        });
+    }
+
+    function onStatusUpdated(data) {
+        if (data) {
+            if (data.action === 'leaderBoard') {
+                if ($('#waitingText').length > 0) {
+                    window.location.reload();
+                } else {
+                    leaderBoard.html('');
+                    leaderBoard.append(LeaderBoard.createLeaderBoard(data.scoresJson, false, userName));
+                }
+            }
+
+            if (data.action === 'waitingForQuestion') {
+                if (status != -2) {
+                    window.location.reload();
+                } else {
+                    $('#waitingForQuestion').text(data.timeCounter);
+                }
+            }
+
+            if (data.action === 'questionShown') {
+                if (status != -3) {
+                    window.location.reload();
+                } else {
+                    $('#waitingForQuestion').text(data.questionInfo.timeCounter);
+                }
+            }
+
+            if (data.action === 'questionFinished' && status != 0) {
+                window.location.reload();
+            }
+        }
+    }
+</script>

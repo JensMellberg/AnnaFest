@@ -1,0 +1,188 @@
+﻿@page
+@model AnnaFest.Pages.QuizAdminModel
+@{
+    ViewData["Title"] = "Frågesport";
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/Alert.js"></script>
+<script src="~/js/LeaderBoard.js"></script>
+<script src="~/js/HtmlUtils.js"></script>
+
+<div class="quizOuter">
+@if (this.Model.IsQuizStarted)
+{
+    @if (this.Model.QuizManager.Status == Quiz.QuizStatus.WaitingForQuestion)
+    {
+       <span class="quizCounter" id="waitingForQuestion"></span>
+    }
+    else if (this.Model.QuizManager.Status == Quiz.QuizStatus.QuestionShown)
+    {
+       <div class="quizContentWrapper">
+           <span class="quizTitle"></span>
+           <span class="questionText"></span>
+       </div>
+       <span class="quizCounter" id="waitingForQuestion"></span>
+    }
+    else if (this.Model.QuizManager.Status == Quiz.QuizStatus.QuestionFinished)
+    {
+        <div class="quizContentWrapper">
+                <div class="quizButtonsWrapper">
+                @if (this.Model.QuizManager.HasMoreQuestions)
+                {
+                    <button class="quizButton" id="nextQuizButton">Nästa fråga</button>
+                }
+                else
+                {
+                    <button class="quizButton" id="finishQuizButton">Avsluta quiz</button>
+                }
+            </div>
+
+            <span class="answerText">Rätt svar var: @this.Model.CorrectAnswer</span>
+            <div id="leaderBoardWrapper"></div>
+        </div>
+    }
+}
+else
+{
+    <div class="quizContentWrapper">
+        <div class="quizButtonsWrapper">
+            @for (var i = 0; i < this.Model.AllQuizzes.Length; i++)
+            {
+                    var quiz = this.Model.AllQuizzes[i];
+                    var extraString = quiz.Item2 ? "disabled" : "";
+                <button class="quizButton startQuizButton" quizId="@i" @extraString>Starta @quiz.Item1</button>
+            }
+
+            <button class="quizButton" id="resetButton">Nollställ resultat</button>
+        </div>
+        <div id="leaderBoardWrapper"></div>
+    </div>
+}
+</div>
+
+<script>
+    @Html.Raw(Model.ScoresJson)
+    @Html.Raw(Model.TimeCounter)
+    @Html.Raw(Model.QuestionJson)
+
+   var status = 0;
+   $('#nextQuizButton').on('click', (e) => {
+        var data = {
+            action: 'nextQuestion',
+        };
+        $.ajax({
+            type: "POST",
+            url: "/QuizAdmin",
+            data: data,
+            success: (e) => { window.location.reload(); }
+        });
+   });
+
+    $('#finishQuizButton').on('click', (e) => {
+        var data = {
+            action: 'finish',
+        };
+        $.ajax({
+            type: "POST",
+            url: "/QuizAdmin",
+            data: data,
+            success: (e) => { window.location.reload(); }
+        });
+    });
+
+    $('.startQuizButton').on('click', (e) => {
+        var id = e.target.getAttribute('quizId');
+        var data = {
+            action: 'startQuiz',
+            id: id
+        };
+        $.ajax({
+            type: "POST",
+            url: "/QuizAdmin",
+            data: data,
+            success: (e) => { window.location.reload(); }
+        });
+    });
+
+    $('#resetButton').on('click', (e) => {
+        Alert.openDialog('Är du säker? Alla poäng kommer nollställas', resetQuiz);
+    });
+
+    var leaderBoard = $('#leaderBoardWrapper');
+    if (leaderBoard.length > 0) {
+        leaderBoard.html('');
+        leaderBoard.append(LeaderBoard.createLeaderBoard(scoresJson, true, null));
+        status = -1;
+    }
+
+    var quizCounter = $('#waitingForQuestion');
+    if (quizCounter.length > 0) {
+        quizCounter.text(timeCounter);
+        status = -2;
+    }
+
+    var questionText = $('.questionText');
+    if (questionText.length > 0) {
+        questionText.text('Fråga ' + questionInfo.questionNumber + ': ' + questionInfo.questionText);
+        $('.quizTitle').text(questionInfo.quizTitle);
+        status = -3;
+    }
+
+    setInterval(() => updateStatus(), 1000);
+
+    function resetQuiz() {
+        var data = {
+            action: 'reset'
+        };
+        $.ajax({
+            type: "POST",
+            url: "/QuizAdmin",
+            data: data,
+            success: (e) => { window.location.reload(); }
+        });
+    }
+
+    function updateStatus() {
+        var data = {
+            action: 'update',
+            status: status
+        };
+        $.ajax({
+            type: "POST",
+            url: "/QuizAdmin",
+            data: data,
+            success: (e) => onStatusUpdated(e)
+        });
+    }
+
+    function onStatusUpdated(data) {
+        if (data) {
+            if (data.action === 'leaderBoard') {
+                if (status != -1) {
+                    window.location.reload();
+                }
+                else if (!LeaderBoard.inProgress) {
+                    leaderBoard.html('');
+                    leaderBoard.append(LeaderBoard.createLeaderBoard(data.scoresJson, false, null));
+                }
+            }
+
+            if (data.action === 'waitingForQuestion') {
+                if (status != -2) {
+                    window.location.reload();
+                } else {
+                    $('#waitingForQuestion').text(data.timeCounter);
+                }
+            }
+
+            if (data.action === 'questionShown') {
+                if (status != -3) {
+                    window.location.reload();
+                } else {
+                    $('#waitingForQuestion').text(data.questionInfo.timeCounter);
+                }
+            }
+        }
+    }
+</script>

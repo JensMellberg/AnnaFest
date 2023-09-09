@@ -13,9 +13,9 @@
             @if (!string.IsNullOrEmpty((string)ViewData["IsAdmin"]))
             {
                 <div class="adminButtonWrapper">
-                    <button class="adminButton" id="moveLeft" photoId="@p.id">&lt;</button>
-                    <button class="adminButton" id="moveRight" photoId="@p.id">&gt;</button>
-                    <button class="adminButton" id="delete" photoId="@p.id">X</button>
+                    <button class="adminButton" photoId="@p.id">&lt;</button>
+                    <button class="adminButton" photoId="@p.id">&gt;</button>
+                    <button class="adminButton adminDeleteButton" photoId="@p.id">X</button>
                 </div>
             }
         </div>
@@ -32,7 +32,7 @@
     });
 
     if ($('.adminButtonWrapper').length > 0) {
-        $('#delete').on('click', (e) => {
+        $('.adminDeleteButton').on('click', (e) => {
             var id = e.target.getAttribute("photoId");
             var data = {
                 action: 'delete',
